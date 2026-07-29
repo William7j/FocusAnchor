@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #fff; }
+    .readerChapterContent { width: 616px; min-height: 900px; margin: 20px auto; }
+    .wr_canvasContainer { position: relative; width: 614px; height: 840px; }
+    canvas { position: absolute; inset: 0; width: 614px; height: 840px; }
+  </style>
+</head>
+<body>
+  <main class="readerChapterContent">
+    <div class="wr_canvasContainer"><canvas width="1842" height="2520"></canvas></div>
+  </main>
+  <script>
+    const canvas = document.querySelector('canvas');
+    const context = canvas.getContext('2d');
+    context.setTransform(3, 0, 0, 3, 0, 15);
+    context.font = '24px sans-serif';
+    context.fillStyle = '#17201c';
+    const lines = ['第一句用于验证微信读书逐句高亮。', '第二句会跨越视觉行继续绘制，', '直到这里才结束！', '第三句确认上下导航可以定位。'];
+    lines.forEach((line, lineIndex) => [...line].forEach((character, index) => context.fillText(character, 42 + index * 26, 92 + lineIndex * 58)));
+    // Controls can clear a small region without repainting the chapter.
+    context.clearRect(0, 0, 4, 4);
+  </script>
+</body>
+</html>

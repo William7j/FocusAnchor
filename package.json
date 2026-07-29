@@ -1,0 +1,68 @@
+{
+  "name": "focus-reader",
+  "version": "1.4.9",
+  "description": "A focused local-document and WeRead desktop reader",
+  "author": "Focus Reader",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "dev:windows": "concurrently -k \"vite --host 127.0.0.1 --base=./\" \"wait-on http://127.0.0.1:5173 && electron .\"",
+    "build": "vite build --base=./",
+    "preview": "vite preview",
+    "start:windows": "electron .",
+    "package:windows": "npm run build && electron-builder --win nsis --config.directories.output=release",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "dexie": "^4.0.10",
+    "dompurify": "^3.2.4",
+    "epubjs": "^0.3.93",
+    "katex": "^0.18.1",
+    "lucide-react": "^0.468.0",
+    "mammoth": "^1.8.0",
+    "mark.js": "^8.11.1",
+    "marked": "^15.0.6",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^10.0.4",
+    "electron": "^39.8.10",
+    "electron-builder": "^26.15.3",
+    "fake-indexeddb": "^6.0.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.9",
+    "wait-on": "^9.1.0"
+  },
+  "build": {
+    "appId": "com.focusreader.workspace",
+    "productName": "专注阅读",
+    "icon": "build/icon.ico",
+    "electronDist": "node_modules/electron/dist",
+    "asar": true,
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "signExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}

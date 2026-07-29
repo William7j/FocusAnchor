@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #fff; }
+    .readerChapterContent { width: 616px; min-height: 900px; margin: 20px auto; }
+    .wr_canvasContainer { position: relative; width: 614px; height: 840px; }
+    canvas { position: absolute; inset: 0; width: 614px; height: 840px; }
+  </style>
+</head>
+<body>
+  <main class="readerChapterContent">
+    <div class="wr_canvasContainer"><canvas width="1842" height="2520"></canvas></div>
+  </main>
+  <script>
+    const canvas = document.querySelector('canvas');
+
+    function draw(lines, y) {
+      const context = canvas.getContext('2d');
+      context.setTransform(3, 0, 0, 3, 0, 15);
+      context.font = '24px sans-serif';
+      context.fillStyle = '#17201c';
+      lines.forEach((line, index) => context.fillText(line, 42, y + index * 58));
+    }
+
+    draw(['旧第一句。', '旧第二句。', '旧第三句。'], 92);
+
+    window.setTimeout(() => {
+      const context = canvas.getContext('2d');
+      // Repaint just the old paragraph area, as the reader does when a line
+      // reflows. The canvas itself remains alive, so no full-reset signal is available.
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, canvas.width, 1180);
+      draw(['新第一句用于局部重绘验证。', '新第二句会在旧位置清除后显示。', '新第三句确认没有遗留色块。'], 560);
+      window.__focusReaderFixtureRedrawn = true;
+    }, 900);
+  </script>
+</body>
+</html>

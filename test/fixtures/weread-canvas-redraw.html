@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #fff; }
+    .readerChapterContent { width: 616px; min-height: 900px; margin: 20px auto; }
+    .wr_canvasContainer { position: relative; width: 614px; height: 840px; }
+    canvas { position: absolute; inset: 0; width: 614px; height: 840px; }
+  </style>
+</head>
+<body>
+  <main class="readerChapterContent">
+    <div class="wr_canvasContainer"><canvas width="1842" height="2520"></canvas></div>
+  </main>
+  <script>
+    const canvas = document.querySelector('canvas');
+
+    function draw(lines, y) {
+      const context = canvas.getContext('2d');
+      context.setTransform(3, 0, 0, 3, 0, 15);
+      context.font = '24px sans-serif';
+      context.fillStyle = '#17201c';
+      lines.forEach((line, index) => context.fillText(line, 42, y + index * 58));
+    }
+
+    draw([
+      '旧第一句用于验证。',
+      '旧第二句会跨越视觉行继续绘制，',
+      '直到这里才结束！',
+      '旧第三句用于验证。',
+    ], 92);
+
+    // A canvas renderer commonly reuses its page canvas by assigning its
+    // dimensions, which clears the bitmap without calling clearRect().
+    window.setTimeout(() => {
+      canvas.width = canvas.width;
+      draw([
+        '新第一句用于验证。',
+        '新第二句会跨越视觉行继续绘制，',
+        '直到这里才结束！',
+        '新第三句用于验证。',
+      ], 330);
+    }, 900);
+
+    window.setTimeout(() => {
+      const context = canvas.getContext('2d');
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.globalCompositeOperation = 'copy';
+      context.fillStyle = 'rgba(0, 0, 0, 0)';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.globalCompositeOperation = 'source-over';
+      context.globalAlpha = 0;
+      context.fillText('不可见的陈旧句子。', 42, 520);
+      context.globalAlpha = 1;
+      draw([
+        '最终第一句用于验证。',
+        '最终第二句会跨越视觉行继续绘制，',
+        '直到这里才结束！',
+        '最终第三句用于验证。',
+      ], 560);
+      window.__focusReaderFixtureRedrawn = true;
+    }, 1500);
+  </script>
+</body>
+</html>
